@@ -4,44 +4,43 @@
 angular.module('NarrowItDownApp', [])
 .controller('NarrowItDownController', NarrowItDownController)
 .service('MenuSearchService', MenuSearchService)
-.directive('shoppingList', ShoppingListDirective)
-.constant('ApiBasePath', "http://davids-restaurant.herokuapp.com");
+.directive('shoppingList', ShoppingListDirective);
 
 function ShoppingListDirective() {
   var ddo = {
     templateUrl: 'shoppingList.html',
     scope: {
       items: '<',
-      myTitle: '@title',
+      error: '<',
       onRemove: '&'
-    },
-    controller: ShoppingListDirectiveController,
-    controllerAs: 'data',
-    bindToController: true
+    }
   };
-
   return ddo;
-}
-
-function ShoppingListDirectiveController() {
-  var data = this;
 }
 
 NarrowItDownController.$inject = ['MenuSearchService'];
 function NarrowItDownController(MenuSearchService) {
 	var data = this;
+	data.error = "";
 	
 	data.searchMenuItems = function (searchItem) {
-		console.log("searchItem: "+searchItem);
-		var promise = MenuSearchService.getMatchedMenuItems(searchItem);
-		promise.then(function (response) {
-			data.items = response.data.menu_items;
-		    console.log(data.items);
-		})
-		.catch(function (error) {
-		  console.log(error);
-		})
-	};
+		if(searchItem ==="" || searchItem === undefined){
+		    data.error= "Nothing found!"
+		} else {
+		    data.error = "";
+			var promise = MenuSearchService.getMatchedMenuItems(searchItem);
+			promise.then(function (response) {
+				data.items = [];
+				data.items = response;
+				if(data.items.length === 0){
+				  data.error = "Nothing found";
+				}
+			})
+			.catch(function (error) {
+			  console.log(error);
+			});
+		}
+	}
 	
 	data.removeItem = function (searchItem) {
 		MenuSearchService.removeItem(searchItem);
@@ -49,26 +48,34 @@ function NarrowItDownController(MenuSearchService) {
 	}
 }
 
-MenuSearchService.$inject = ['$http', 'ApiBasePath']
-function MenuSearchService($http, ApiBasePath) {
+MenuSearchService.$inject = ['$http']
+function MenuSearchService($http) {
   var service = this;
   var items = [];
+  var listItems = [];
   
   service.getMatchedMenuItems = function (searchItem) {
-    var response = $http({
-		method: "GET",
-		url: (ApiBasePath + "/menu_items.json"),
-        params: {
-			category: searchItem
-		}	
-    });
-	items = response.menu_items;
-	return response;
+	searchItem = searchItem.toLowerCase();
+	listItems = [];
+    return $http({
+         method: "GET",
+         url: "https://davids-restaurant.herokuapp.com/menu_items.json"
+        }).then(function (result) {
+		items = result.data;
+		items = items.menu_items;
+		
+		for(var i = 0 ; i <= items.length-1; i++){
+		  var itemdesc = items[i].description;
+		  if(itemdesc.toLowerCase().indexOf(searchItem) !== -1 ){
+			  listItems.push(items[i]);
+		  }
+		}		
+		return listItems;
+	});
   }; 
   
   service.removeItem = function (searchItem) {
-	console.log(items);
-    items.splice(searchItem, 1);
+	listItems.splice(searchItem, 1);
   };
    
 }

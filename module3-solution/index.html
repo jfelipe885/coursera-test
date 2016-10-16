@@ -20,12 +20,11 @@
     </div>
 	<br/>
 	<br/>
-	<!-- found-items should be implemented as a component
-    <found-items found-items="...." on-remove="...."></found-items> -->
-		
+	<br/>	
+
 	<shopping-list
         items="data.items"
-        title="{{data.myTitle}}"
+        error="data.error"
         on-remove="data.removeItem(index)"></shopping-list>
   </div>
 

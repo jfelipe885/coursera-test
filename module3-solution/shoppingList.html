@@ -1,7 +1,7 @@
-<h3>Title: {{ data.myTitle }}</h3>
+<span ng-if="error">{{error}}</span>
 <ol>
-  <li ng-repeat="item in data.items">
+  <li ng-repeat="item in items">
     {{ item.short_name }} of {{ item.name }}
-    <button ng-click="data.onRemove({index: $index});">Remove Item</button>
+    <button ng-click="onRemove({index: $index});">Remove Item</button>
   </li>
 </ol>
