@@ -2,36 +2,37 @@
 'use strict';
 
 angular.module('data')
-.service('MenuDataService', MenuDataService);
-
-MenuSearchService.$inject = ['$http']
-function MenuSearchService($http) {
+.service('MenuDataService', ['$http', '$q', function($http, $q) {
     var service = this;
   
-    service.getAllCategories = function() {		
-		return $http({
+    service.getAllCategories = function() {	
+		var deffered = $q.defer();	
+		$http({
 			 method: "GET",
 			 url: "https://davids-restaurant.herokuapp.com/categories.json"
 			}).then(function (result) {
-			items = result.data;
-			items = items.menu_items;
-			return items;
+				deffered.resolve(result.data);
+			}, function(error){
+				deffered.reject(error);
 		});
+		return deffered.promise;
 	};
 
-	service.getItemsForCategory = function(categoryShortName) {		
-		return $http({
+	service.getItemsForCategory = function(categoryShortName) {	
+		var deffered = $q.defer();		
+		$http({
 			method: "GET",
-			url: "https://davids-restaurant.herokuapp.com/menu_items.json?category="+categoryShortName
-			  //,{params:{"param1": val1, "param2": val2}}
+			url: "https://davids-restaurant.herokuapp.com/menu_items.json",
+			  params : {
+				category : categoryShortName
+			  }
 			}).then(function (result) {
-			items = result.data;
-			items = items.menu_items;
-			return items;
+				deffered.resolve(result.data);
+			}, function(error){
+				deffered.reject(error);			
 		});
-	  };
-	  
+		return deffered.promise;	  	  
 	};
-}
-
-})();
+ }]);
+ 
+ })();

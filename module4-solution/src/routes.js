@@ -16,20 +16,32 @@ function RoutesConfig($stateProvider, $urlRouterProvider) {
   // Home page
   .state('home', {
     url: '/',
-    templateUrl: 'src/templates/categories.template.html'
+    templateUrl: 'templates/home.template.html'
   })
 
-  .state('categories', {
-    url: '/main-list',
-    templateUrl: 'src/shoppinglist/templates/main-shoppinglist.template.html',
-    controller: 'MainShoppingListController as mainList'
-  });
-  
-  .state('items', {
-    url: '/main-list',
-    templateUrl: 'src/shoppinglist/templates/main-shoppinglist.template.html',
-    controller: 'MainShoppingListController as mainList'
+
+  .state('categoriesList', {
+    url: '/categories-list',
+    templateUrl: 'templates/categoriesList.template.html',
+    controller: 'CategoriesListController as categoriesList',
+    resolve : {
+      categories : ['MenuDataService', function(MenuDataService){
+        return MenuDataService.getAllCategories();
+      }]
+    }
+  })
+
+  .state('categoriesList.categoryItem', {
+    url: '/category-items/{categoryName}',
+    templateUrl: 'templates/categoryItems.template.html',
+    controller: 'CategoryItemsController as categoryItems',
+    resolve : {
+      items : ['MenuDataService', '$stateParams', function(MenuDataService, $stateParams){
+        return MenuDataService.getItemsForCategory($stateParams.categoryName);
+      }]
+    }
   });
 }
 
 })();
+
