@@ -10,42 +10,37 @@ function signupController(MenuService, userInfoService ) {
   	
   $ctrl.itemError = false ; 
   $ctrl.user = {
-	  firtsName : "" ,
-      lastName : "" ,
+	  firstname : "" ,
+      lastname : "" ,
        email : "" ,
        phone : "" ,
-      favDish : "" 
+      favdish : "" 
 	  };
   
   $ctrl.okSign = false ;
 
- $ctrl.doSignup  = function (){
-	console.log ( $ctrl.user   );
-	 $ctrl.itemError = false ; 
-	 $ctrl.okSign = false ;
-	 $ctrl.user.favDish  = $ctrl.user.favDish.toUpperCase(); 
+  $ctrl.doSignup  = function (){
+	$ctrl.itemError = false ; 
+	$ctrl.okSign = false ;
+	$ctrl.user.favdish  = $ctrl.user.favdish.toUpperCase(); 
 	 
-
-// do search 	
-	MenuService.getItem($ctrl.user.favDish)
-.then(function (result) {
+	// do search 	
+	MenuService.getItem($ctrl.user.favdish)
+    .then(function (result) {
 		$ctrl.itemd = result ;
 		///add info 
-	 userInfoService.addCookie ("user" ,$ctrl.user ) ;
-	 userInfoService.addCookie ("fav_item" ,$ctrl.itemd  ) ;
+	userInfoService.addCookie ("user" ,$ctrl.user ) ;
+	userInfoService.addCookie ("fav_item" ,$ctrl.itemd  ) ;
 	
-	 // show to user	
-		$ctrl.okSign = true ;
-		console.log($ctrl.itemd );		
-}).catch(function (error) {
-	 $ctrl.itemError = true;
+	// show to user	
+	$ctrl.okSign = true ;
+	console.log($ctrl.itemd );		
+	}).catch(function (error) {
+	  $ctrl.itemError = true;
       console.log(error);
-		  }) ;	 
+	}) ;	 
 
-//// end search
-	
-	 }; /// end sign function
+	}; 
 }
-
 
 })();

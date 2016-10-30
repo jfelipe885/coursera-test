@@ -8,17 +8,20 @@ angular.module('common')
 MenuService.$inject = ['$http', 'ApiPath', '$q'];
 function MenuService($http, ApiPath, $q) {
   var service = this;
+  console.log("ApiPath: "+ApiPath);
 
   service.getItem = function (shortName) {
     var deferred = $q.defer(); // to return result as promise
-	$http.get("https://davids-restaurant.herokuapp.com/menu_items.json").then(function (response) {
+	var url = "https://jfelipe885.herokuapp.com/menu_items.json";
+	
+	$http.get(url).then(function (response) {
 		for (var i =0 ; i < response.data.menu_items.length ; i++){
-			
-			if  (response.data.menu_items[i].short_name == shortName )
-			{  deferred.resolve(response.data.menu_items[i]) ;
-			return deferred.promise;  			}
+			if  (response.data.menu_items[i].short_name == shortName ) {  
+				deferred.resolve(response.data.menu_items[i]) ;
+				return deferred.promise;  			
 			}
-     deferred.reject("No such menu number exists");
+		}
+		deferred.reject("No such menu number exists");
 	    }).catch(function (error) {
 	  deferred.reject(error.statusText); 
     });

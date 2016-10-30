@@ -1,15 +1,16 @@
 <div class="row">
-	<h1>Sign Up Form</h1>
-	{{reg.completed}}
+  <h1 class="text-center">Sign Up Form</h1>
+  <div class="col-md-5 col-xs-offset-1" >
+	{{regForm.completed}}
     <fieldset>
       <form name='regForm' novalidate>
-		First Name:
-        <input type="text" name="firstname" placeholder="Pick a first name"
-          ng-model="reg.user.firstname"
+		<label>First Name:</label>
+        <input class="form-control" type="text" name="firstname" placeholder="Pick a first name"
+          ng-model="signCtrl.user.firstname"
           required
           minlength="4"
           ng-maxlength="10">
-          {{ reg.user.firstname }}
+          {{ regForm.user.firstname }}
         <span
             ng-if="(regForm.firstname.$error.minlength || regForm.firstname.$error.required) && regForm.firstname.$touched">
             first name must be at least 4 characters long
@@ -17,15 +18,16 @@
         <span ng-if="regForm.firstname.$error.maxlength && regForm.firstname.$touched">
             first name must not be longer than 10 characters
         </span>
+		<div class="error" ng-if="regForm.firstname.$error.required && regForm.firstname.$touched">Fist name is required</div>
         <br>
 		
-		Last Name
-		<input type="text" name="lastname" placeholder="Pick a last name"
-          ng-model="reg.user.lastname"
+		<label>Last Name:</label>
+		<input class="form-control" type="text" name="lastname" placeholder="Pick a last name"
+          ng-model="signCtrl.user.lastname"
           required
           minlength="4"
           ng-maxlength="10">
-          {{ reg.user.lastname }}
+          {{ regForm.user.lastname }}
         <span
             ng-if="(regForm.lastname.$error.minlength || regForm.lastname.$error.required) && regForm.lastname.$touched">
             last name must be at least 4 characters long
@@ -35,30 +37,31 @@
         </span>
         <br>
 		
-		Email:
-        <input type="email" name="email" placeholder="Email"
-          ng-model="reg.user.email"
+		<label>Email:</label>
+        <input class="form-control" type="email" name="email" placeholder="Email"
+          ng-model="signCtrl.user.email"
           required>
         <span ng-if="regForm.email.$invalid && regForm.email.$touched">
             Must be a valid email address: handle@domain format
         </span>
         <br>
 
-		Phone:
-        <input type="text" name="phone" placeholder="Phone ###-###-####"
-          ng-model="reg.user.phone"
-          pattern="(\d{3})-(\d{3})-(\d{4})">
+		<label>Phone:</label>
+        <input class="form-control" type="text" name="phone" placeholder="Phone ###-###-####"
+          ng-model="signCtrl.user.phone"
+          pattern="(\d{3})-(\d{3})-(\d{4})"
+		  required>
           <span ng-if="regForm.phone.$invalid && regForm.phone.$touched">
             Phone must be in the format ###-###-####.
         </span>
         <br>
 		
-		Your favorite dish:
-		<input type="text" name="favoritedish" placeholder="Enter favorite dish"
-			  ng-model="reg.user.favoritedish"
+		<label>Your favorite dish:</label>
+		<input class="form-control" type="text" name="favdish" placeholder="Enter favorite dish"
+			  ng-model="signCtrl.user.favdish"
 			  required>
-			  {{ reg.user.favoritedish }}
-		<span ng-if="reg.completed">
+			  {{ regForm.user.favdish }}
+		<span ng-if="regForm.completed">
             Must be entrer your favorite dish
         </span> 
 		<div class="error" ng-if="userForm.fav.$error.required && 	userForm.fav.$touched">
@@ -82,3 +85,4 @@
       </form>
     </fieldset>
   </div>
+ </div> 
