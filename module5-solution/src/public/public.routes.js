@@ -43,7 +43,23 @@ function routeConfig ($stateProvider) {
     })
 	.state('public.signup', {
       absract: true,
-      templateUrl: 'src/public/signup.html'
-    });
+      templateUrl: 'src/public/signup/signup.html',
+	  controller: 'signupController',
+      controllerAs: 'signCtrl'
+    })
+	.state('public.userinfo', {
+      url: '/userinfo',
+      templateUrl: 'src/public/signup/userinfo.html',
+	  controller: 'userController',
+      controllerAs: 'userCtrl',
+	  resolve: {
+        favItem: ['userInfoService', function (userInfoService) {
+          return userInfoService.getCookie("fav_item");
+        }]  ,
+		user: ['userInfoService', function (userInfoService) {
+          return userInfoService.getCookie("user");
+        }]		
+	 }
+	});
 }
 })();

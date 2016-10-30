@@ -1,12 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Sing Up</title>  
-  </head>
-  <body>
+<div class="row">
 	<h1>Sign Up Form</h1>
 	{{reg.completed}}
     <fieldset>
@@ -60,17 +52,33 @@
             Phone must be in the format ###-###-####.
         </span>
         <br>
-
+		
+		Your favorite dish:
+		<input type="text" name="favoritedish" placeholder="Enter favorite dish"
+			  ng-model="reg.user.favoritedish"
+			  required>
+			  {{ reg.user.favoritedish }}
+		<span ng-if="reg.completed">
+            Must be entrer your favorite dish
+        </span> 
+		<div class="error" ng-if="userForm.fav.$error.required && 	userForm.fav.$touched">
+        Your Favorite dish is required    </div>
+        <div class="error" ng-if="signCtrl.itemError">
+		No such menu number exists   </div>
+		<br>
+		
         <button
           ng-disabled="regForm.$invalid"
-          ng-click="reg.submit()">Submit</button>
+          ng-click="signCtrl.doSignup()">Submit</button>
 		
-		<span ng-if="reg.completed">
-            <input type="text" name="favoritedish" placeholder="Enter favorite dish"
-			  ng-model="reg.user.favoritedish">
-			  {{ reg.user.favoritedish }}
-        </span>  
+		<div class="col-md-5  bg-info text-success" ng-if="signCtrl.okSign" >
+			<h3 class="text-danger">  Congratulations  ,  Your information has been saved !!!!!! </h3>
+			<strong>   Your Favorite item is : </strong> 
+	
+			<menu-item  menu-item="signCtrl.itemd" >
+			</menu-item>
+	    </div>
+   
       </form>
     </fieldset>
-  </body>
-</html>  
+  </div>
